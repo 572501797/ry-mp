@@ -1,0 +1,13 @@
+/Users/chenlei/myProducts/Ry-mp/ry-mp/ruoyi-generator/src/main/java/com/ruoyi/generator/service/IGenTableService.java
+/Users/chenlei/myProducts/Ry-mp/ry-mp/ruoyi-generator/src/main/java/com/ruoyi/generator/mapper/GenTableColumnMapper.java
+/Users/chenlei/myProducts/Ry-mp/ry-mp/ruoyi-generator/src/main/java/com/ruoyi/generator/util/GenUtils.java
+/Users/chenlei/myProducts/Ry-mp/ry-mp/ruoyi-generator/src/main/java/com/ruoyi/generator/service/IGenTableColumnService.java
+/Users/chenlei/myProducts/Ry-mp/ry-mp/ruoyi-generator/src/main/java/com/ruoyi/generator/service/impl/GenTableServiceImpl.java
+/Users/chenlei/myProducts/Ry-mp/ry-mp/ruoyi-generator/src/main/java/com/ruoyi/generator/util/VelocityUtils.java
+/Users/chenlei/myProducts/Ry-mp/ry-mp/ruoyi-generator/src/main/java/com/ruoyi/generator/service/impl/GenTableColumnServiceImpl.java
+/Users/chenlei/myProducts/Ry-mp/ry-mp/ruoyi-generator/src/main/java/com/ruoyi/generator/config/GenConfig.java
+/Users/chenlei/myProducts/Ry-mp/ry-mp/ruoyi-generator/src/main/java/com/ruoyi/generator/controller/GenController.java
+/Users/chenlei/myProducts/Ry-mp/ry-mp/ruoyi-generator/src/main/java/com/ruoyi/generator/domain/GenTable.java
+/Users/chenlei/myProducts/Ry-mp/ry-mp/ruoyi-generator/src/main/java/com/ruoyi/generator/util/VelocityInitializer.java
+/Users/chenlei/myProducts/Ry-mp/ry-mp/ruoyi-generator/src/main/java/com/ruoyi/generator/mapper/GenTableMapper.java
+/Users/chenlei/myProducts/Ry-mp/ry-mp/ruoyi-generator/src/main/java/com/ruoyi/generator/domain/GenTableColumn.java

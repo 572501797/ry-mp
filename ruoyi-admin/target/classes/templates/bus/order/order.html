@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('接送订单管理列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <label>订单号：</label>
+                                <input type="text" name="orderNo"/>
+                            </li>
+                            <li>
+                                <label>下单人userid：</label>
+                                <input type="text" name="orderUserId"/>
+                            </li>
+                            <li>
+                                <label>联系电话：</label>
+                                <input type="text" name="orderUserPhone"/>
+                            </li>
+                            <li>
+                                <label>订单状态：101 已提交  102 待接送 103 已接送：</label>
+                                <select name="orderStatus" th:with="type=${@dict.getType('order_type')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li class="select-time">
+                                <label>接送时间：</label>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginOrderCreateTime]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endOrderCreateTime]"/>
+                            </li>
+                            <li>
+                                <label>订单金额：</label>
+                                <input type="text" name="orderPrice"/>
+                            </li>
+                            <li>
+                                <label>下单人姓名：</label>
+                                <input type="text" name="orderUserName"/>
+                            </li>
+                            <li>
+                                <label>要接送的宝宝唯一编号：</label>
+                                <input type="text" name="orderMentId"/>
+                            </li>
+                            <li>
+                                <label>宝宝名称：</label>
+                                <input type="text" name="orderMentName"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="bus:order:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="bus:order:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="bus:order:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="bus:order:export">
+                    <i class="fa fa-download"></i> 导出
+                </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('bus:order:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('bus:order:remove')}]];
+        var orderStatusDatas = [[${@dict.getType('order_type')}]];
+        var prefix = ctx + "bus/order";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "接送订单管理",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field: 'id', 
+                    title: 'ID',
+                    visible: false
+                },
+                {
+                    field: 'orderNo', 
+                    title: '订单号'
+                },
+                {
+                    field: 'orderUserId', 
+                    title: '下单人userid'
+                },
+                {
+                    field: 'orderUserPhone', 
+                    title: '联系电话'
+                },
+                {
+                    field: 'orderStatus', 
+                    title: '订单状态：101 已提交  102 待接送 103 已接送',
+                    formatter: function(value, row, index) {
+                       return $.table.selectDictLabel(orderStatusDatas, value);
+                    }
+                },
+                {
+                    field: 'orderCreateTime', 
+                    title: '接送时间'
+                },
+                {
+                    field: 'orderPrice', 
+                    title: '订单金额'
+                },
+                {
+                    field: 'remark', 
+                    title: '备注'
+                },
+                {
+                    field: 'orderUserName', 
+                    title: '下单人姓名'
+                },
+                {
+                    field: 'orderMentId', 
+                    title: '要接送的宝宝唯一编号'
+                },
+                {
+                    field: 'orderMentName', 
+                    title: '宝宝名称'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>
