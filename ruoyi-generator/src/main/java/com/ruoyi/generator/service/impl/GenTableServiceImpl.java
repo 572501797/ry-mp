@@ -43,6 +43,13 @@ public class GenTableServiceImpl implements IGenTableService
 {
     private static final Logger log = LoggerFactory.getLogger(GenTableServiceImpl.class);
 
+    private static final String CREATE_DATE="create_time";
+    private static final String CREATE_BY="create_by";
+    private static final String MODI_DATE="update_time";
+    private static final String MODI_BY="update_by";
+    private static final String REMAKE="remark";
+
+
     @Autowired
     private GenTableMapper genTableMapper;
 
@@ -81,6 +88,7 @@ public class GenTableServiceImpl implements IGenTableService
      * @param genTable 业务信息
      * @return 数据库表集合
      */
+    @Override
     public List<GenTable> selectDbTableList(GenTable genTable)
     {
         return genTableMapper.selectDbTableList(genTable);
@@ -92,6 +100,7 @@ public class GenTableServiceImpl implements IGenTableService
      * @param tableNames 表名称组
      * @return 数据库表集合
      */
+    @Override
     public List<GenTable> selectDbTableListByNames(String[] tableNames)
     {
         return genTableMapper.selectDbTableListByNames(tableNames);
@@ -156,8 +165,11 @@ public class GenTableServiceImpl implements IGenTableService
                     List<GenTableColumn> genTableColumns = genTableColumnMapper.selectDbTableColumnsByName(tableName);
                     for (GenTableColumn column : genTableColumns)
                     {
-                        GenUtils.initColumnField(column, table);
-                        genTableColumnMapper.insertGenTableColumn(column);
+                        if (isRemove(column.getColumnName())){
+                            GenUtils.initColumnField(column, table);
+                            genTableColumnMapper.insertGenTableColumn(column);
+                        }
+
                     }
                 }
             }
@@ -174,6 +186,7 @@ public class GenTableServiceImpl implements IGenTableService
      * @param tableId 表编号
      * @return 预览数据列表
      */
+    @Override
     public Map<String, String> previewCode(Long tableId)
     {
         Map<String, String> dataMap = new LinkedHashMap<>();
@@ -278,6 +291,7 @@ public class GenTableServiceImpl implements IGenTableService
      * 
      * @param genTable 业务信息
      */
+    @Override
     public void validateEdit(GenTable genTable)
     {
         if (GenConstants.TPL_TREE.equals(genTable.getTplCategory()))
@@ -338,5 +352,13 @@ public class GenTableServiceImpl implements IGenTableService
             genTable.setTreeParentCode(treeParentCode);
             genTable.setTreeName(treeName);
         }
+    }
+
+    private static boolean isRemove(String attName){
+        if (CREATE_BY.equals(attName)||CREATE_DATE.equals(attName)||MODI_DATE.equals(attName)
+                ||MODI_BY.equals(attName)||REMAKE.equals(attName)){
+            return false;
+        }
+        return true;
     }
 }
